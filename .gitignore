@@ -1,0 +1,30 @@
+# Node
+node_modules/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+client/.env
+server/.env
+
+# Build outputs
+client/dist/
+client/.vite/
+server/dist/
+server/build/
+
+# IDE/editor
+.vscode/
+.idea/
+.DS_Store
+
+# Coverage
+coverage/
+
+# Local databases
+*.sqlite
+*.db
