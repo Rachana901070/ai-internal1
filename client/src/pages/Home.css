@@ -1,0 +1,6 @@
+.hero{max-width:1200px;margin:32px auto;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:0 20px}
+.hero h1{font-size:48px;line-height:1.1;margin:0 0 10px}
+.sub{color:var(--muted);margin:0 0 20px}
+.cta{display:flex;gap:14px;margin:8px 0 16px}
+.img-card{border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+.img-card img{display:block;width:100%;height:auto}
