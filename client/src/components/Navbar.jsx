@@ -1,18 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
+import { appRoutes } from "../router/routes.jsx";
 import "./Navbar.css";
 
+const navigationRoutes = appRoutes.filter(route => route.showInNav);
+
 export default function Navbar(){
-  const links = [
-    ["Home","/"],
-    ["Post Food","/post"],
-    ["Collector","/collector"],
-    ["Proof Upload","/proof"],
-    ["How It Works","/how-it-works"],
-    ["AI Models","/ai-models"],
-    ["Admin Panel","/admin"],
-    ["Privacy","/privacy"],
-    ["FAQ & Support","/faq"]
-  ];
   return (
     <header className="nav">
       <div className="wrap">
@@ -21,9 +13,9 @@ export default function Navbar(){
           <span>Maitri Dhatri</span>
         </Link>
         <nav>
-          {links.map(([t,href])=>(
-            <NavLink key={href} to={href} className={({isActive}) => isActive? "link active":"link"}>
-              {t}
+          {navigationRoutes.map(({ label, path }) => (
+            <NavLink key={path} to={path} className={({isActive}) => isActive? "link active":"link"}>
+              {label}
             </NavLink>
           ))}
         </nav>
