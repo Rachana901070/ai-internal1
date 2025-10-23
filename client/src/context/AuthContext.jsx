@@ -1,15 +1,25 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getMe } from "../services/authService.js";
 
-const AuthContext = createContext({ user: null, loading: true, setUser: () => {} });
+const AuthContext = createContext({ user: null, loading: true, setUser: () => {}, logout: () => {} });
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
   useEffect(() => {
     let mounted = true;
     (async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoading(false);
+        return;
+      }
       try {
         const profile = await getMe();
         if (mounted) {
@@ -17,6 +27,7 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         console.warn("Failed to fetch current user", error?.message || error);
+        localStorage.removeItem("token");
       } finally {
         if (mounted) {
           setLoading(false);
@@ -29,7 +40,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

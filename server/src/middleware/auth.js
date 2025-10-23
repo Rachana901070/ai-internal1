@@ -10,16 +10,21 @@ export const protect = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized");
   }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const user = await User.findById(decoded.id).select("-passwordHash");
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-passwordHash");
 
-  if (!user) {
+    if (!user) {
+      res.status(401);
+      throw new Error("User not found");
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
     res.status(401);
-    throw new Error("User not found");
+    throw new Error("Invalid token");
   }
-
-  req.user = user;
-  next();
 });
 
 export const authorize = (...roles) => (req, res, next) => {

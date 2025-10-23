@@ -1,6 +1,223 @@
-.hero{max-width:1200px;margin:32px auto;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:0 20px}
-.hero h1{font-size:48px;line-height:1.1;margin:0 0 10px}
-.sub{color:var(--muted);margin:0 0 20px}
-.cta{display:flex;gap:14px;margin:8px 0 16px}
-.img-card{border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
-.img-card img{display:block;width:100%;height:auto}
+/* Hero Section */
+.hero {
+  max-width: 1200px;
+  margin: 32px auto;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 28px;
+  padding: 0 20px;
+  background: linear-gradient(to right, #f9fafb, #e9f5ec);
+  border-radius: 20px;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(22, 163, 74, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.05) 0%, transparent 50%);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Typography */
+.hero h1 {
+  font-size: 48px;
+  line-height: 1.1;
+  margin: 0 0 10px;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.sub {
+  color: var(--muted);
+  margin: 0 0 20px;
+  font-size: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Buttons */
+.cta {
+  display: flex;
+  gap: 14px;
+  margin: 8px 0 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(22, 163, 74, 0.3);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn.outline {
+  background: #fff;
+  color: var(--brand);
+}
+
+.btn.outline:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* Image Card */
+.img-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1;
+}
+
+.img-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.5s ease;
+}
+
+.img-card:hover img {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(22, 163, 74, 0.1) 100%);
+  pointer-events: none;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.fade-in-delay {
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.fade-in-delay-2 {
+  animation: fadeIn 1s ease-out 0.6s both;
+}
+
+.slide-in {
+  animation: slideIn 1s ease-out 0.8s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Stats Banner */
+.stats-banner {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+}
+
+.stat {
+  text-align: center;
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 20px;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .sub {
+    font-size: 16px;
+  }
+
+  .cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .stats-banner {
+    padding: 15px;
+  }
+
+  .stat {
+    font-size: 14px;
+  }
+}

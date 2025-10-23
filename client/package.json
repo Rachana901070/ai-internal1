@@ -9,9 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "axios": "^1.6.7",
+    "browser-image-compression": "^2.0.2",
+    "exif-js": "^2.3.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.546.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.6.0",
+    "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.22.3"
   },
   "devDependencies": {

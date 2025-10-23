@@ -1,0 +1,192 @@
+import { useState, useEffect, useMemo } from 'react';
+import { ChevronDown, Mail, HelpCircle, AlertTriangle } from 'lucide-react';
+import { faqData } from '../data/faqData.js';
+import SupportFormModal from '../components/SupportFormModal.jsx';
+
+// Reusable AccordionItem component
+function AccordionItem({ title, content, isOpen, onToggle, id }) {
+  return (
+    <div className="border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between p-4 md:p-6 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+        aria-expanded={isOpen}
+        aria-controls={`accordion-content-${id}`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onToggle();
+          }
+        }}
+      >
+        <span className="font-semibold text-gray-900 tracking-tight">{title}</span>
+        <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      <div
+        id={`accordion-content-${id}`}
+        className={`overflow-hidden transition-all duration-300 ease-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+      >
+        <div className="p-4 md:p-6 pt-0">
+          <p className="text-gray-600 leading-relaxed">{content}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function FaqSupport() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [openItem, setOpenItem] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalCategory, setModalCategory] = useState('');
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(searchQuery), 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Filter FAQs based on search
+  const filteredFaqs = useMemo(() => {
+    if (!debouncedQuery.trim()) return faqData;
+
+    const query = debouncedQuery.toLowerCase();
+    return faqData.map(group => ({
+      ...group,
+      questions: group.questions.filter(q =>
+        q.q.toLowerCase().includes(query) || q.a.toLowerCase().includes(query)
+      )
+    })).filter(group => group.questions.length > 0);
+  }, [debouncedQuery]);
+
+  const toggleItem = (id) => {
+    setOpenItem(openItem === id ? null : id);
+  };
+
+  const openModal = (category = '') => {
+    setModalCategory(category);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalCategory('');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        {/* Page Header */}
+        <div className="text-center mb-8 md:mb-12 animate-fade-in">
+          <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
+            FAQ & Support
+          </h1>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
+            Quick answers and easy ways to contact us.
+          </p>
+        </div>
+
+        {/* Search */}
+        <div className="mb-8 md:mb-12 animate-slide-up">
+          <input
+            type="text"
+            placeholder="Search questions…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full border border-gray-200 dark:border-gray-700 rounded-2xl px-4 py-3 md:px-6 md:py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+          {/* FAQ Section */}
+          <div className="lg:col-span-2 space-y-6 md:space-y-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            {filteredFaqs.length === 0 ? (
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-6 text-center">
+                <p className="text-gray-600 dark:text-gray-400">No results found. Try a different keyword.</p>
+              </div>
+            ) : (
+              filteredFaqs.map((group, groupIndex) => (
+                <div key={group.group} className="animate-slide-up" style={{ animationDelay: `${0.3 + groupIndex * 0.1}s` }}>
+                  <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white tracking-tight mb-4 md:mb-6">
+                    {group.group}
+                  </h2>
+                  <div className="space-y-4">
+                    {group.questions.map((q, qIndex) => {
+                      const id = `${groupIndex}-${qIndex}`;
+                      return (
+                        <AccordionItem
+                          key={id}
+                          id={id}
+                          title={q.q}
+                          content={q.a}
+                          isOpen={openItem === id}
+                          onToggle={() => toggleItem(id)}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Quick Help */}
+          <div className="space-y-6 md:space-y-8 animate-slide-up lg:sticky lg:top-24" style={{ animationDelay: '0.4s' }}>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-6">
+              <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white tracking-tight mb-4 md:mb-6">
+                Quick Help
+              </h3>
+              <div className="space-y-3 md:space-y-4">
+                <button
+                  onClick={() => openModal()}
+                  className="w-full flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-3 font-medium transition focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <HelpCircle className="h-5 w-5" />
+                  Contact Support
+                </button>
+                <button
+                  onClick={() => openModal('bug')}
+                  className="w-full flex items-center gap-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg px-4 py-3 font-medium transition focus:outline-none focus:ring-2 focus:ring-orange-500"
+                >
+                  <AlertTriangle className="h-5 w-5" />
+                  Report an Issue
+                </button>
+                <a
+                  href="mailto:support@maitridhatri.org"
+                  className="w-full flex items-center gap-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-4 py-3 font-medium transition focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  <Mail className="h-5 w-5" />
+                  Email us
+                </a>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">
+                Typical response within 24 hours.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <SupportFormModal isOpen={modalOpen} onClose={closeModal} prefillCategory={modalCategory} />
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-up {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out;
+        }
+        .animate-slide-up {
+          animation: slide-up 0.6s ease-out;
+          animation-fill-mode: both;
+        }
+      `}</style>
+    </div>
+  );
+}

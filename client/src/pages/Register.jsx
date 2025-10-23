@@ -45,6 +45,7 @@ export default function Register(){
             value={form.name}
             onChange={handleChange}
             style={{width:"100%", padding:12, borderRadius:10, border:"1px solid #cbd5e1"}}
+            placeholder="Enter your full name"
           />
         </div>
         <div>
@@ -56,6 +57,7 @@ export default function Register(){
             value={form.email}
             onChange={handleChange}
             style={{width:"100%", padding:12, borderRadius:10, border:"1px solid #cbd5e1"}}
+            placeholder="Enter your email"
           />
         </div>
         <div>
@@ -67,6 +69,7 @@ export default function Register(){
             value={form.password}
             onChange={handleChange}
             style={{width:"100%", padding:12, borderRadius:10, border:"1px solid #cbd5e1"}}
+            placeholder="Create a password"
           />
         </div>
         <div>
@@ -82,11 +85,14 @@ export default function Register(){
             ))}
           </select>
         </div>
-        {message && <div style={{color:"var(--brand)"}}>{message}</div>}
-        {error && <div style={{color:"#dc2626"}}>{error}</div>}
-        <button className="btn" type="submit" disabled={loading}>
+        {message && <div style={{color:"var(--brand)", fontSize:14}}>{message}</div>}
+        {error && <div style={{color:"#dc2626", fontSize:14}}>{error}</div>}
+        <button className="btn" type="submit" disabled={loading} style={{cursor: loading ? "not-allowed" : "pointer"}}>
           {loading ? "Registering..." : "Register"}
         </button>
+        <p style={{textAlign:"center", fontSize:14}}>
+          Already have an account? <a href="/login" style={{color:"var(--brand)"}}>Login here</a>
+        </p>
       </form>
     </div>
   );

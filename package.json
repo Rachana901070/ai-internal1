@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev": "concurrently -n CLIENT,SERVER -c green,cyan \"npm:dev:client\" \"npm:dev:server\"",
+    "dev:client": "npm --workspace client run dev",
+    "dev:server": "npm --workspace server run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

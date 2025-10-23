@@ -42,6 +42,7 @@ export default function Login(){
             value={form.email}
             onChange={handleChange}
             style={{width:"100%", padding:12, borderRadius:10, border:"1px solid #cbd5e1"}}
+            placeholder="Enter your email"
           />
         </div>
         <div>
@@ -53,12 +54,16 @@ export default function Login(){
             value={form.password}
             onChange={handleChange}
             style={{width:"100%", padding:12, borderRadius:10, border:"1px solid #cbd5e1"}}
+            placeholder="Enter your password"
           />
         </div>
-        {error && <div style={{color:"#dc2626"}}>{error}</div>}
-        <button className="btn" type="submit" disabled={loading}>
+        {error && <div style={{color:"#dc2626", fontSize:14}}>{error}</div>}
+        <button className="btn" type="submit" disabled={loading} style={{cursor: loading ? "not-allowed" : "pointer"}}>
           {loading ? "Signing in..." : "Login"}
         </button>
+        <p style={{textAlign:"center", fontSize:14}}>
+          Don't have an account? <a href="/register" style={{color:"var(--brand)"}}>Register here</a>
+        </p>
       </form>
     </div>
   );
